@@ -7,7 +7,6 @@ This project is a simple URL shortener application built using **FastAPI** and f
 - [Features](#features)
 - [Architecture](#architecture)
 - [Installation](#installation)
-- [Usage](#usage)
 - [API Endpoints](#api-endpoints)
 - [Contributing](#contributing)
 - [License](#license)
@@ -24,9 +23,9 @@ This project is a simple URL shortener application built using **FastAPI** and f
 
 The application is structured using Clean Architecture principles, which promote a clear separation of concerns and modularity. The main components are:
 
-- **Presentation Layer**: Handles HTTP requests and responses.
-- **Application Layer**: Contains the business logic and application use cases.
+- **Delivery Layer**: Handles HTTP requests and responses.
 - **Domain Layer**: Defines the core business models and interfaces.
+- **Application Layer**: Contains the business logic and application use cases.
 - **Infrastructure Layer**: Manages external dependencies such as databases and external APIs.
 
 This separation makes the codebase easier to maintain, test, and extend.
@@ -37,7 +36,7 @@ To set up the project locally, follow these steps:
 
 1. Clone the repository:
 
-    ```git clone https://github.com/yourusername/url-shortener-clean-architecture.git```
+    ```git clone https://github.com/fabianfalon/url-shortener-clean-architecture.git```
 
 2. Create a virtual environment:
 
@@ -50,6 +49,11 @@ To set up the project locally, follow these steps:
 4. To run the application, use the following command:
 
     ````uvicorn app.main:app --reload````
+
+To set up with docker
+1. ````docker-compose build````
+
+2. ````docker-compose up````
 
 
 ## API Endpoints
@@ -71,7 +75,7 @@ Content-Type: application/json
 ```
 **Retrieve Original URL**
 ```http
-GET /shorten/abc123
+GET /abc123
 Content-Type: application/json
 ```
 ## Contributing

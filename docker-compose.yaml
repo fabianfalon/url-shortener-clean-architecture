@@ -1,0 +1,25 @@
+version: "3.3"
+
+services:
+  url-shortener-mongodb:
+    image: mongo
+    container_name: url-shortener-mongodb
+    ports:
+      - "27017:27017"
+    volumes:
+      - mongodb_data:/data/db
+  memcached:
+    image: memcached:latest
+    container_name: url-shortener-memcached
+    ports:
+      - "11211:11211"
+  url-shortener-api:
+    build: .
+    container_name: url-shortener-api
+    ports:
+      - "5000:5000"
+    depends_on:
+      - url-shortener-mongodb
+      - memcached
+volumes:
+  mongodb_data:

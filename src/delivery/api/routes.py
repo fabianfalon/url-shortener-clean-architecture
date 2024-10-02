@@ -4,7 +4,7 @@ from fastapi import status as http_status
 from src.application.create_short_url import CreateShortUrlUseCase
 from src.application.get_original_url import GetOriginalUrlUseCase
 from src.config import settings
-from src.delivery.api.dependencies import get_url_shortener_use_case, get_original_url_use_case
+from src.delivery.api.dependencies import create_short_url_use_case, get_original_url_use_case
 from src.infrastructure.dto.url_dto import UrlPayloadIn, UrlResponseOut
 
 # Router Config
@@ -29,7 +29,7 @@ def read_root():
 )
 async def shortener(
     payload: UrlPayloadIn,
-    use_case: CreateShortUrlUseCase = Depends(get_url_shortener_use_case),
+    use_case: CreateShortUrlUseCase = Depends(create_short_url_use_case),
 ) -> UrlResponseOut:
     original_url = payload.url.unicode_string()
     url = await use_case.execute(original_url)
