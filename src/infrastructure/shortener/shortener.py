@@ -7,7 +7,7 @@ BASE62_CHARS = string.digits + string.ascii_letters
 
 class URLShortener(ABC):
     @abstractmethod
-    def shorten_url(self, auto_increment_id): ...
+    def shorten_url(self, auto_increment_id: int) -> str: ...
 
     @abstractmethod
     def convert(self, auto_increment_id: int) -> str: ...
@@ -30,7 +30,7 @@ class URLShortenerBase62(URLShortener):
 
 
 class URLShortenerSHA2(URLShortener):
-    def shorten_url(self, auto_increment_id):
+    def shorten_url(self, auto_increment_id: int) -> str:
         short_url = self.convert(auto_increment_id)
         return short_url
 

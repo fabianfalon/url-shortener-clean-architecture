@@ -33,7 +33,10 @@ async def create_short_url_use_case(
     shorter: URLShortener = Depends(get_shortener),
     cache: AbstractCacheRepository = Depends(get_url_cache_repository),
 ) -> CreateShortUrlUseCase:
-    return CreateShortUrlUseCase(url_repository=url_repository, shorter=shorter, cache=cache)
+    return CreateShortUrlUseCase(
+        url_repository=url_repository, shorter=shorter, cache=cache
+    )
+
 
 async def get_original_url_use_case(
     url_repository: UrlRepository = Depends(in_memory_repository),
