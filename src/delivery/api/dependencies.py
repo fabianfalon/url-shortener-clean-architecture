@@ -8,6 +8,7 @@ from src.infrastructure.storage.cache import (
     InMemoryCacheRepository,
 )
 from src.infrastructure.storage.in_memory import InMemoryRepository
+from src.infrastructure.storage.memcached import MemcachedRepository
 from src.infrastructure.storage.mongo import MongoRepository
 from src.application.create_short_url import CreateShortUrlUseCase
 
@@ -19,6 +20,9 @@ async def get_shortener() -> URLShortener:
 async def get_url_cache_repository() -> AbstractCacheRepository:
     return InMemoryCacheRepository()
 
+async def get_url_cache_memcached_repository() -> AbstractCacheRepository:
+    return MemcachedRepository()
+
 
 async def in_memory_repository() -> UrlRepository:
     return InMemoryRepository()
@@ -29,9 +33,9 @@ async def mongo_repository() -> UrlRepository:
 
 
 async def create_short_url_use_case(
-    url_repository: UrlRepository = Depends(in_memory_repository),
+    url_repository: UrlRepository = Depends(mongo_repository),
     shorter: URLShortener = Depends(get_shortener),
-    cache: AbstractCacheRepository = Depends(get_url_cache_repository),
+    cache: AbstractCacheRepository = Depends(get_url_cache_memcached_repository),
 ) -> CreateShortUrlUseCase:
     return CreateShortUrlUseCase(
         url_repository=url_repository, shorter=shorter, cache=cache
@@ -39,7 +43,7 @@ async def create_short_url_use_case(
 
 
 async def get_original_url_use_case(
-    url_repository: UrlRepository = Depends(in_memory_repository),
-    cache: AbstractCacheRepository = Depends(get_url_cache_repository),
+    url_repository: UrlRepository = Depends(mongo_repository),
+    cache: AbstractCacheRepository = Depends(get_url_cache_memcached_repository),
 ) -> GetOriginalUrlUseCase:
     return GetOriginalUrlUseCase(url_repository=url_repository, cache=cache)

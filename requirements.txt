@@ -1,3 +1,4 @@
 fastapi[standard]==0.115.0
 ruff==0.6.8
 motor==3.6.0
+python-memcached==1.62
