@@ -44,7 +44,7 @@ To set up the project locally, follow these steps:
 
 3. Install the required dependencies:
 
-   ````pip install -r requirements.txt   ````
+   ````pip install -r requirements.txt```` or  ````pip install -r requirements-tests.txt````
 
 4. To run the application, use the following command:
 
