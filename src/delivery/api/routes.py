@@ -1,3 +1,4 @@
+import logging
 from fastapi import APIRouter, Depends, HTTPException
 from fastapi import status as http_status
 
@@ -9,6 +10,9 @@ from src.delivery.api.dependencies import (
     get_original_url_use_case,
 )
 from src.infrastructure.dto.url_dto import UrlPayloadIn, UrlResponseOut
+
+logger = logging.getLogger(settings.service_name)
+
 
 # Router Config
 router = APIRouter(tags=["url shortener"])
@@ -56,9 +60,11 @@ async def get_original_url(
     short_url: str,
     use_case: GetOriginalUrlUseCase = Depends(get_original_url_use_case),
 ) -> UrlResponseOut:
-    url = await use_case.execute(short_url)
-    if not url:
+    try:
+        url = await use_case.execute(short_url)
+    except Exception as exc:
+        logger.exception(f"Url not found: {short_url}")
         raise HTTPException(
-            status_code=http_status.HTTP_404_NOT_FOUND, detail="Url not found"
-        )
+            status_code=http_status.HTTP_404_NOT_FOUND, detail=str(exc)
+        ) from exc # Opcional, encadena el error original si es necesario
     return UrlResponseOut(url=url)
