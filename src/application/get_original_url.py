@@ -1,5 +1,6 @@
 from typing import Optional
 
+from src.domain.exception.url_not_found import UrlNotFound
 from src.domain.url_repository import UrlRepository
 from src.infrastructure.storage.cache import AbstractCacheRepository
 
@@ -15,6 +16,6 @@ class GetOriginalUrlUseCase:
             return cached_url
         url = await self.repository.get_by_short_url(short_url)
         if not url:
-            return None
+            raise UrlNotFound()
         self.cache.set(short_url, url.url)
         return url.url
