@@ -25,13 +25,9 @@ class CreateShortUrlUseCase:
             self.cache.set(original_url, existing_url.short_url)
             return existing_url.short_url
 
-        next_id = await self._get_next_url_id()
+        next_id = await self.repository.get_next_id()
         short_url = self.shorter.shorten_url(next_id)
         url = Url(_id=next_id, url=original_url, short_url=short_url)
         await self.repository.save(url)
         self.cache.set(original_url, url.short_url)
         return url.short_url
-
-    async def _get_next_url_id(self) -> int:
-        count = await self.repository.find_all()
-        return len(count) + 1

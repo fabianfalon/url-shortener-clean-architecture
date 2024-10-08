@@ -24,3 +24,6 @@ class UrlRepository[T](ABC):
 
     @abstractmethod
     async def get_by_short_url(self, short_url) -> Url: ...
+
+    @abstractmethod
+    async def get_next_id(self) -> int: ...
