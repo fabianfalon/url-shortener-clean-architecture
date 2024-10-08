@@ -24,3 +24,11 @@ class TestURLShortenerApi(TestApi):
         response = self.client.get(f"/{MOCK_SHORT_URL}")
         expect(response.json()).to(equal({"url": MOCK_ORIGINAL_URL}))
         expect(response.status_code).to(be(status.HTTP_200_OK))
+
+    def test_get_all_short_urls(self, mock_create_short_url_use_case, mock_get_original_url_use_case):
+        data = {"url": MOCK_ORIGINAL_URL}
+        self.client.post("/shortener", json=data)
+
+        response = self.client.get("/urls")
+        expect(response.status_code).to(be(status.HTTP_200_OK))
+        expect(len(response.json())).to(equal(1))
