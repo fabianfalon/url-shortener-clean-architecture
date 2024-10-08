@@ -26,5 +26,8 @@ class InMemoryRepository(UrlRepository):
     async def get_by_short_url(self, short_url: str) -> Optional[Url]:
         return next(filter(lambda x: (x.short_url == short_url), self._urls), None)
 
+    async def get_next_id(self) -> int:
+        return len(self._urls) + 1
+
     def clear(self):
         self._urls = []
