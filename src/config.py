@@ -4,6 +4,7 @@ from pydantic.v1 import BaseSettings
 class CommonSettings(BaseSettings):
     app_title: str = "URL Shortener"
     app_name: str = "fastapi"
+    service_name: str = "url-shortener"
     debug: bool = False
     swagger_url: str = "/docs"
 
