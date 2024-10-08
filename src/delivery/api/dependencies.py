@@ -51,6 +51,6 @@ async def get_original_url_use_case(
 
 
 async def get_all_short_urls_use_case(
-    url_repository: UrlRepository = Depends(in_memory_repository),
+    url_repository: UrlRepository = Depends(mongo_repository),
 ) -> GetAllShortUrls:
     return GetAllShortUrls(url_repository=url_repository)
