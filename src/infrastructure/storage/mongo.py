@@ -44,6 +44,9 @@ class MongoRepository(AbstractMongoRepository, UrlRepository):
         url = await self.collection.find_one({"short_url": short_url})
         return self._create_url(dict(url)) if url else None
 
+    async def get_next_id(self) -> int:
+        return self.collection.count({})
+
     @staticmethod
     def _create_url(raw_data: Dict) -> Url:
         return Url.from_primitive(raw_data)
