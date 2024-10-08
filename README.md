@@ -73,6 +73,19 @@ Content-Type: application/json
     "url": "https://example.com/some/long/url"
 }
 ```
+**Get short URLS**
+```http
+GET /urls
+Content-Type: application/json
+{
+  "urls": [
+    {
+      "id": 1,
+      "short_url": "abc123"
+    }
+  ]
+}
+```
 **Retrieve Original URL**
 ```http
 GET /abc123
