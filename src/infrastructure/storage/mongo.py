@@ -17,8 +17,6 @@ class AbstractMongoRepository(ABC):
         self.collection = self.database["urls"]
 
     async def save(self, aggregate_root: AggregateRoot) -> None:
-        document = aggregate_root.to_primitive()
-        document["id"] = int(document["id"]) + 1
         await self.collection.insert_one(aggregate_root.to_primitive())
 
 
