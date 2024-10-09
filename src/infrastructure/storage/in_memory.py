@@ -11,7 +11,6 @@ class InMemoryRepository(UrlRepository):
     _urls: List[Url] = []
 
     async def save(self, url: Url) -> None:
-        url.id = len(self._urls) + 1
         self._urls.append(url)
 
     async def find_one(self, url_id: str) -> Optional[Url]:
