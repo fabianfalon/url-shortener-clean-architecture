@@ -59,6 +59,7 @@ To set up with docker
 ## API Endpoints
 
 - **POST /shorten**: Shortens a given URL.
+- **GET /urls**: Get all urls.
 - **GET /{shortened_id}**: Retrieves the original URL from a shortened ID.
 
 ### Example Requests
