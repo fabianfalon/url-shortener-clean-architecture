@@ -17,4 +17,4 @@ class InMemoryCacheRepository(AbstractCacheRepository):
         self.mapping[key] = value
 
     def get(self, key):
-        return self.mapping.get("key", None)
+        return self.mapping.get(key, None)
