@@ -17,4 +17,4 @@ class UrlOut(BaseModel):
 
 
 class UrlListResponse(BaseModel):
-    urls: List[UrlOut]
+    urls: List[dict]
