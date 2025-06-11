@@ -6,13 +6,20 @@ from fastapi import status as http_status
 from src.application.create_short_url import CreateShortUrlUseCase
 from src.application.get_original_url import GetOriginalUrlUseCase
 from src.application.get_all_short_urls import GetAllShortUrlsUseCase
+from src.application.get_url_stats import GetUrlStatsUseCase
 from src.config import settings
 from src.delivery.api.dependencies import (
     create_short_url_use_case,
     get_all_short_urls_use_case,
     get_original_url_use_case,
+    get_url_stats_use_case,
 )
-from src.infrastructure.dto.url_dto import UrlPayloadIn, UrlResponseOut, UrlListResponse
+from src.infrastructure.dto.url_dto import (
+    UrlPayloadIn,
+    UrlResponseOut,
+    UrlListResponse,
+    UrlStatsResponse,
+)
 
 logger = logging.getLogger(settings.service_name)
 
@@ -83,3 +90,21 @@ async def get_original_url(
             status_code=http_status.HTTP_404_NOT_FOUND, detail=str(exc)
         ) from exc  # Opcional, encadena el error original si es necesario
     return UrlResponseOut(url=url)
+
+
+@router.get(
+    "/{short_code}/stats",
+    summary="Get URL statistics",
+    response_model=UrlStatsResponse
+)
+async def get_url_stats(
+    short_code: str,
+    use_case: GetUrlStatsUseCase = Depends(get_url_stats_use_case)
+):
+    stats = await use_case.execute(short_code)
+    if not stats:
+        raise HTTPException(
+            status_code=http_status.HTTP_404_NOT_FOUND,
+            detail=f"No statistics found for short code: {short_code}",
+        )
+    return stats

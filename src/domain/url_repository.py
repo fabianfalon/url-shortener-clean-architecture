@@ -37,11 +37,6 @@ class UrlRepository(ABC):
         ...
 
     @abstractmethod
-    async def exists_by_short_code(self, short_code: ShortCode) -> bool:
-        """Check if a URL exists with the given short code"""
-        ...
-
-    @abstractmethod
     async def get_next_id(self) -> int:
         """Get the next available ID for a new URL"""
         ...

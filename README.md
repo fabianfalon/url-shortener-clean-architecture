@@ -1,121 +1,163 @@
-# URL Shortener with Clean Architecture and DDD
 
-This project is a simple URL shortener application built using **FastAPI** and following the principles of **Clean Architecture** and **Domain-Driven Design (DDD)**. The aim of this project is to demonstrate how to structure a simple application while adhering to the principles of good design and DDD patterns.
+# 🔗 URL Shortener with Clean Architecture & DDD
 
-## Table of Contents
+A ✨ **simple, elegant** URL shortener application built with **FastAPI**, following **Clean Architecture** and **Domain-Driven Design (DDD)** principles. This project demonstrates how to build a maintainable and scalable architecture while keeping things lightweight and developer-friendly.
 
-- [Features](#features)
-- [Architecture](#architecture)
-- [Domain-Driven Design](#domain-driven-design)
-- [Project Structure](#project-structure)
-- [Installation](#installation)
-- [API Endpoints](#api-endpoints)
-- [Contributing](#contributing)
-- [License](#license)
+---
 
-## Features
+## 📚 Table of Contents
 
-- Shorten long URLs for easier sharing
-- Retrieve original URLs from shortened links
-- Clean and modular architecture following DDD principles
-- Fast and efficient with FastAPI
-- Unit tests to ensure reliability
-- Domain events for side effects
-- Value Objects for domain concepts
+- [🚀 Features](#-features)
+- [🏗️ Architecture](#-architecture)
+- [🧠 Domain-Driven Design](#domain-driven-design)
+- [📁 Project Structure](#project-structure)
+- [⚙️ Installation](#️-installation)
+- [🌐 API Endpoints](#-api-endpoints)
+- [🤝 Contributing](#-contributing)
+- [📄 License](#-license)
 
-## Architecture
+---
 
-The application is structured using Clean Architecture principles and DDD patterns, which promote a clear separation of concerns and modularity. The main components are:
+## 🚀 Features
 
-- **Delivery Layer**: Handles HTTP requests and responses using FastAPI.
-- **Domain Layer**: Contains the core business models, value objects, and domain events.
-- **Application Layer**: Implements use cases and orchestrates domain objects.
-- **Infrastructure Layer**: Manages external dependencies such as databases and external APIs.
+- 🔗 Shorten long URLs for easier sharing.
+- 📥 Retrieve original URLs from short codes.
+- 🧱 Clean and modular architecture using DDD.
+- ⚡ Built on **FastAPI** for speed and simplicity.
+- ✅ Unit-tested for reliability.
+- 🧩 Domain Events & Value Objects support.
 
-## Domain-Driven Design
+---
 
-### Aggregates
-- **UrlAggregate**: Manages the lifecycle of URL entities and ensures consistency rules
-  - Root Entity: Url
-  - Value Objects: ShortCode, OriginalUrl
+## 🏗️ Architecture
 
-### Value Objects
-- **ShortCode**: Represents the shortened URL code
-- **OriginalUrl**: Represents the original URL with validation
+The app follows **Clean Architecture**, dividing responsibilities across layers for separation of concerns:
 
-### Domain Events
-- **UrlShortenedEvent**: Triggered when a new URL is shortened
-- **UrlAccessedEvent**: Triggered when a shortened URL is accessed
+- 🛣️ **Delivery Layer**: Handles HTTP requests with FastAPI.
+- 🧠 **Domain Layer**: Business logic, entities, value objects, and domain events.
+- ⚙️ **Application Layer**: Use cases and orchestrators.
+- 🗄️ **Infrastructure Layer**: DB access and external APIs.
 
-### Bounded Contexts
-Currently, the application operates within a single bounded context: URL Management.
+---
 
-## Project Structure
+## 🧠 Domain-Driven Design
+
+### 🧩 Aggregates
+- `UrlAggregate`: Manages URL lifecycle.
+  - 🔹 Root: `Url`
+  - 🔹 Value Objects: `ShortCode`, `OriginalUrl`
+
+### 🧪 Value Objects
+- `ShortCode`: Shortened URL string
+- `OriginalUrl`: Validated original URL
+
+### 🛎️ Domain Events
+- `UrlShortenedEvent`: Fired when a URL is shortened.
+- `UrlAccessedEvent`: Triggered when a URL is accessed.
+
+### 📦 Bounded Contexts
+- URL Management (current context).
+
+---
+
+## 📁 Project Structure
 
 ```
 src/
-├── domain/           # Domain layer
-│   ├── entities/     # Domain entities
-│   ├── value_objects/# Value objects
-│   └── events/       # Domain events
-├── application/      # Application layer
-│   ├── services/     # Use cases
-│   └── interfaces/   # Ports
-├── infrastructure/   # Infrastructure layer
-│   ├── persistence/  # Database implementations
-│   └── external/     # External service implementations
-└── delivery/         # Delivery layer
-    └── api/          # FastAPI endpoints
+├── domain/           # Core business logic
+│   ├── exceptions/
+│   ├── value_objects.py
+│   ├── url.py
+│   ├── url_repository.py
+│   └── events.py
+├── application/      # Use cases & services
+│   ├── create_short_url.py
+│   ├── get_original_url.py
+│   ├── get_url_stats.py
+│   └── get_all_urls.py
+├── infrastructure/   # DB and external service handling
+│   ├── dto/
+│   ├── storage/
+│   ├── shortener/
+│   └── events/
+├── delivery/         # API layer with FastAPI
+│   └── api/
+│       ├── dependencies.py
+│       └── routers.py
+├── config.py        # Centralized configuration
+└── main.py          # Main entry point
 ```
 
-## Installation
+---
 
-To set up the project locally, follow these steps:
+## ⚙️ Installation
+
+### 🖥️ Local Setup
 
 1. Clone the repository:
 
-    ```git clone https://github.com/fabianfalon/url-shortener-clean-architecture.git```
+```bash
+git clone https://github.com/fabianfalon/url-shortener-clean-architecture.git
+cd url-shortener-clean-architecture
+```
 
-2. Create a virtual environment:
+2. Create and activate a virtual environment:
 
-   ````python -m venv venv source venv/bin/activate````
+```bash
+python -m venv venv
+source venv/bin/activate
+```
 
-3. Install the required dependencies:
+3. Install dependencies:
 
-   ````pip install -r requirements.txt```` or  ````pip install -r requirements-tests.txt````
+```bash
+pip install -r requirements.txt
+# or for dev and test support
+pip install -r requirements-tests.txt
+```
 
-4. To run the application, use the following command:
+4. Run the app:
 
-    ````uvicorn app.main:app --reload````
+```bash
+uvicorn app.main:app --reload
+```
 
-To set up with docker
-1. ````docker-compose build````
+### 🐳 Docker Setup
 
-2. ````docker-compose up````
+```bash
+docker-compose build
+docker-compose up
+```
 
+---
 
-## API Endpoints
+## 🌐 API Endpoints
 
-- **POST /shorten**: Shortens a given URL.
-- **GET /urls**: Get all urls.
-- **GET /{shortened_id}**: Retrieves the original URL from a shortened ID.
+| Method | Endpoint              | Description               |
+|--------|-----------------------|---------------------------|
+| POST   | `/shorten`            | Shorten a long URL        |
+| GET    | `/urls`               | List all shortened URLs   |
+| GET    | `/{shortened_id}`     | Retrieve the original URL |
+| GET    | `/{short_code}/stats` | Get URL statistics |
+### 🔍 Example Requests
 
-### Example Requests
-
-**Shorten a URL**
+#### ➕ Shorten a URL
 
 ```http
 POST /shorten
 Content-Type: application/json
 
 {
-    "url": "https://example.com/some/long/url"
+  "url": "https://example.com/some/long/url"
 }
 ```
-**Get short URLS**
+
+#### 📋 Get All Short URLs
+
 ```http
 GET /urls
 Content-Type: application/json
+
 {
   "urls": [
     {
@@ -125,15 +167,23 @@ Content-Type: application/json
   ]
 }
 ```
-**Retrieve Original URL**
+
+#### 🔁 Retrieve Original URL
+
 ```http
 GET /abc123
 Content-Type: application/json
 ```
-## Contributing
 
-Contributions are welcome! Please fork the repository and submit a pull request for any enhancements or fixes.
+---
 
-## License
+## 🤝 Contributing
 
-This project is licensed under the MIT License. See the [LICENSE](LICENSE) file for details.
+Contributions are welcome! 🙌
+Feel free to fork the repo and submit a pull request with improvements or bug fixes.
+
+---
+
+## 📄 License
+
+This project is licensed under the **MIT License**. See the [LICENSE](LICENSE) file for more details.

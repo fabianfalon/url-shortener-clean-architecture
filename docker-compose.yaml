@@ -21,5 +21,17 @@ services:
     depends_on:
       - url-shortener-mongodb
       - memcached
+    environment:
+      - MONGO_URL=mongodb://url-shortener-mongodb:27017
+      - MEMCACHED_URL=url-shortener-memcached:11211
+      - BASE_SHORT_URL=http://localhost:5000/
+    env_file:
+      - ./src/.env
+    volumes:
+      - type: bind
+        source: .
+        target: /app/
+        read_only: true
+
 volumes:
   mongodb_data:
