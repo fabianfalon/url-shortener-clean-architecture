@@ -101,6 +101,5 @@ class Url(AggregateRoot):
 
     def get_events(self) -> List[DomainEvent]:
         events = self._events.copy()
-        print(events)
         self._events.clear()
         return events

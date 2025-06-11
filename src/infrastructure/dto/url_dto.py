@@ -1,5 +1,5 @@
-from typing import List
-
+from typing import List, Optional, Dict
+from datetime import datetime
 from pydantic import AnyHttpUrl, BaseModel
 
 
@@ -17,4 +17,15 @@ class UrlOut(BaseModel):
 
 
 class UrlListResponse(BaseModel):
-    urls: List[dict]
+    urls: List[Dict]
+
+    class Config:
+        json_encoders = {datetime: lambda v: v.isoformat()}
+
+
+class UrlStatsResponse(BaseModel):
+    short_code: str
+    url_id: int
+    total_creations: int
+    total_accesses: int
+    last_accessed: Optional[datetime]

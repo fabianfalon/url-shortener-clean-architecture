@@ -34,6 +34,10 @@ class GetOriginalUrlUseCase:
         url.record_access()
         await self._url_repository.save(url)
 
+        # Publish events related to the URL access
+        for event in url.get_events():
+            await self._event_bus.publish(event)
+
         # Cache the result
         self._cache.set(short_code, str(url.original_url))
 

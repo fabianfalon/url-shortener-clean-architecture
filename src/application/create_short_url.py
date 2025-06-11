@@ -34,7 +34,6 @@ class CreateShortUrlUseCase:
         next_id = await self._url_repository.get_next_id()
         short_code = ShortCode(self._shorter.shorten_url(next_id))
 
-        # Create URL aggregate
         url = Url.create(
             url_id=next_id, original_url=original_url_vo, short_code=short_code
         )
@@ -42,8 +41,9 @@ class CreateShortUrlUseCase:
         # Save to repository
         saved_url = await self._url_repository.save(url)
 
+        # Record the creation event
         for event in saved_url.get_events():
-            self._event_bus.publish(event)
+            await self._event_bus.publish(event)
 
         self._cache.set(original_url, str(saved_url.short_code))
         return str(saved_url.short_code)

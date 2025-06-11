@@ -3,6 +3,7 @@ from fastapi import Depends
 from src.application.get_original_url import GetOriginalUrlUseCase
 from src.application.create_short_url import CreateShortUrlUseCase
 from src.application.get_all_short_urls import GetAllShortUrlsUseCase
+from src.application.get_url_stats import GetUrlStatsUseCase
 from src.domain.url_repository import UrlRepository
 from src.infrastructure.shortener.shortener import URLShortener, URLShortenerSHA2
 from src.infrastructure.storage.cache import (
@@ -14,13 +15,13 @@ from src.infrastructure.storage.memcached import MemcachedRepository
 from src.infrastructure.storage.mongo import MongoRepository
 from src.infrastructure.events.event_bus_impl import InMemoryEventBus
 from src.infrastructure.events.event_handlers import UrlEventHandlers
-from src.infrastructure.storage.analytics_repository import InMemoryAnalyticsRepository
+from src.infrastructure.storage.analytics_repository import MongoAnalyticsRepository
 from src.domain.events import UrlShortenedEvent, UrlAccessedEvent
 
 
 # Event Bus and Handlers
-async def get_analytics_repository() -> InMemoryAnalyticsRepository:
-    return InMemoryAnalyticsRepository()
+async def get_analytics_repository() -> MongoAnalyticsRepository:
+    return MongoAnalyticsRepository()
 
 
 async def get_event_bus() -> InMemoryEventBus:
@@ -80,3 +81,9 @@ async def get_all_short_urls_use_case(
     url_repository: UrlRepository = Depends(mongo_repository),
 ) -> GetAllShortUrlsUseCase:
     return GetAllShortUrlsUseCase(url_repository=url_repository)
+
+
+async def get_url_stats_use_case(
+    analytics_repository: MongoAnalyticsRepository = Depends(get_analytics_repository),
+) -> GetUrlStatsUseCase:
+    return GetUrlStatsUseCase(analytics_repository)

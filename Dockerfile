@@ -2,6 +2,10 @@ FROM python:3.12.7-alpine
 
 WORKDIR /app
 
+# Instalar dependencias del sistema necesarias
+RUN apk add --no-cache gcc musl-dev linux-headers
+
+# Copiar requirements primero para aprovechar la caché de Docker
 COPY requirements.txt .
 
 RUN pip install --no-cache-dir -r requirements.txt

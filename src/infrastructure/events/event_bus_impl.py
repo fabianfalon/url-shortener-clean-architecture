@@ -1,5 +1,6 @@
 import logging
 from typing import List, Dict, Type, Callable
+import asyncio
 
 from src.domain.events import DomainEvent, EventBus
 
@@ -16,13 +17,17 @@ class InMemoryEventBus(EventBus):
         self._handlers[event_type].append(handler)
         self._logger.info(f"Handler subscribed to {event_type.__name__}")
 
-    def publish(self, event: DomainEvent) -> None:
+    async def publish(self, event: DomainEvent) -> None:
         """Publish an event to all subscribed handlers"""
         event_type = type(event)
         if event_type in self._handlers:
             for handler in self._handlers[event_type]:
                 try:
-                    handler(event)
+                    # Si el handler es una corrutina, la esperamos
+                    if asyncio.iscoroutinefunction(handler):
+                        await handler(event)
+                    else:
+                        handler(event)
                     self._logger.info(
                         f"Event {event_type.__name__} handled successfully"
                     )
