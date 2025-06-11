@@ -5,19 +5,14 @@ from fastapi import status as http_status
 
 from src.application.create_short_url import CreateShortUrlUseCase
 from src.application.get_original_url import GetOriginalUrlUseCase
-from src.application.get_all_short_urls import GetAllShortUrls
+from src.application.get_all_short_urls import GetAllShortUrlsUseCase
 from src.config import settings
 from src.delivery.api.dependencies import (
     create_short_url_use_case,
     get_all_short_urls_use_case,
     get_original_url_use_case,
 )
-from src.infrastructure.dto.url_dto import (
-    UrlPayloadIn,
-    UrlResponseOut,
-    UrlListResponse,
-    UrlOut,
-)
+from src.infrastructure.dto.url_dto import UrlPayloadIn, UrlResponseOut, UrlListResponse
 
 logger = logging.getLogger(settings.service_name)
 
@@ -59,10 +54,9 @@ async def shortener(
     status_code=http_status.HTTP_200_OK,
 )
 async def get_all_urls(
-    use_case: GetAllShortUrls = Depends(get_all_short_urls_use_case),
+    use_case: GetAllShortUrlsUseCase = Depends(get_all_short_urls_use_case),
 ) -> UrlListResponse:
     urls = await use_case.execute()
-    urls = [UrlOut(**url.to_primitive()) for url in urls]
     return UrlListResponse(urls=urls)
 
 

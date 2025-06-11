@@ -2,7 +2,7 @@ from fastapi import Depends
 
 from src.application.get_original_url import GetOriginalUrlUseCase
 from src.application.create_short_url import CreateShortUrlUseCase
-from src.application.get_all_short_urls import GetAllShortUrls
+from src.application.get_all_short_urls import GetAllShortUrlsUseCase
 from src.domain.url_repository import UrlRepository
 from src.infrastructure.shortener.shortener import URLShortener, URLShortenerSHA2
 from src.infrastructure.storage.cache import (
@@ -10,7 +10,29 @@ from src.infrastructure.storage.cache import (
     InMemoryCacheRepository,
 )
 from src.infrastructure.storage.in_memory import InMemoryRepository
+from src.infrastructure.storage.memcached import MemcachedRepository
 from src.infrastructure.storage.mongo import MongoRepository
+from src.infrastructure.events.event_bus_impl import InMemoryEventBus
+from src.infrastructure.events.event_handlers import UrlEventHandlers
+from src.infrastructure.storage.analytics_repository import InMemoryAnalyticsRepository
+from src.domain.events import UrlShortenedEvent, UrlAccessedEvent
+
+
+# Event Bus and Handlers
+async def get_analytics_repository() -> InMemoryAnalyticsRepository:
+    return InMemoryAnalyticsRepository()
+
+
+async def get_event_bus() -> InMemoryEventBus:
+    event_bus = InMemoryEventBus()
+    analytics_repository = await get_analytics_repository()
+    url_event_handlers = UrlEventHandlers(analytics_repository)
+
+    # Subscribe event handlers
+    event_bus.subscribe(UrlShortenedEvent, url_event_handlers.handle_url_shortened)
+    event_bus.subscribe(UrlAccessedEvent, url_event_handlers.handle_url_accessed)
+
+    return event_bus
 
 
 async def get_shortener() -> URLShortener:
@@ -19,6 +41,10 @@ async def get_shortener() -> URLShortener:
 
 async def get_url_cache_repository() -> AbstractCacheRepository:
     return InMemoryCacheRepository()
+
+
+async def get_url_cache_memcached_repository() -> AbstractCacheRepository:
+    return MemcachedRepository()
 
 
 async def in_memory_repository() -> UrlRepository:
@@ -30,23 +56,27 @@ async def mongo_repository() -> UrlRepository:
 
 
 async def create_short_url_use_case(
-    url_repository: UrlRepository = Depends(in_memory_repository),
+    url_repository: UrlRepository = Depends(mongo_repository),
     shorter: URLShortener = Depends(get_shortener),
     cache: AbstractCacheRepository = Depends(get_url_cache_repository),
+    event_bus: InMemoryEventBus = Depends(get_event_bus),
 ) -> CreateShortUrlUseCase:
     return CreateShortUrlUseCase(
-        url_repository=url_repository, shorter=shorter, cache=cache
+        url_repository=url_repository, shorter=shorter, cache=cache, event_bus=event_bus
     )
 
 
 async def get_original_url_use_case(
-    url_repository: UrlRepository = Depends(in_memory_repository),
-    cache: AbstractCacheRepository = Depends(get_url_cache_repository),
+    url_repository: UrlRepository = Depends(mongo_repository),
+    cache: AbstractCacheRepository = Depends(get_url_cache_memcached_repository),
+    event_bus: InMemoryEventBus = Depends(get_event_bus),
 ) -> GetOriginalUrlUseCase:
-    return GetOriginalUrlUseCase(url_repository=url_repository, cache=cache)
+    return GetOriginalUrlUseCase(
+        url_repository=url_repository, cache=cache, event_bus=event_bus
+    )
 
 
 async def get_all_short_urls_use_case(
-    url_repository: UrlRepository = Depends(in_memory_repository),
-) -> GetAllShortUrls:
-    return GetAllShortUrls(url_repository=url_repository)
+    url_repository: UrlRepository = Depends(mongo_repository),
+) -> GetAllShortUrlsUseCase:
+    return GetAllShortUrlsUseCase(url_repository=url_repository)
