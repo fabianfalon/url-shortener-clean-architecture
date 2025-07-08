@@ -1,6 +1,6 @@
-import logging
-from typing import List, Dict, Type, Callable
 import asyncio
+import logging
+from typing import Callable, Dict, List, Type
 
 from src.domain.events import DomainEvent, EventBus
 

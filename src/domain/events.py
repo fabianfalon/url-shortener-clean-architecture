@@ -1,6 +1,6 @@
 from dataclasses import dataclass, field
 from datetime import datetime
-from typing import List, Type, Callable
+from typing import Callable, List, Type
 
 from .value_objects import OriginalUrl, ShortCode, UrlId
 

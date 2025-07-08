@@ -3,6 +3,28 @@ from fastapi.testclient import TestClient
 from starlette import status
 from src.main import app
 from tests.conftest import MOCK_ORIGINAL_URL, MOCK_SHORT_URL
+from src.infrastructure.storage.in_memory import InMemoryRepository
+from src.infrastructure.storage.cache import InMemoryCacheRepository
+from src.infrastructure.storage.analytics_repository import InMemoryAnalyticsRepository
+from src.delivery.api.dependencies import (
+    mongo_repository,
+    get_url_cache_memcached_repository,
+    get_analytics_repository,
+)
+import pytest
+
+
+# Sobrescribir la dependencia de mongo_repository por InMemoryRepository
+@pytest.fixture(autouse=True)
+def override_repo_dependency():
+    repo = InMemoryRepository()
+    cache = InMemoryCacheRepository()
+    analytics = InMemoryAnalyticsRepository()
+    app.dependency_overrides[mongo_repository] = lambda: repo
+    app.dependency_overrides[get_url_cache_memcached_repository] = lambda: cache
+    app.dependency_overrides[get_analytics_repository] = lambda: analytics
+    yield
+    app.dependency_overrides.clear()
 
 
 class TestApi:

@@ -1,6 +1,6 @@
 import logging
 
-from src.domain.events import UrlShortenedEvent, UrlAccessedEvent
+from src.domain.events import UrlAccessedEvent, UrlShortenedEvent
 from src.infrastructure.storage.analytics_repository import AnalyticsRepository
 
 

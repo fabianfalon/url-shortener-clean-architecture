@@ -1,11 +1,15 @@
 from fastapi import Depends
 
-from src.application.get_original_url import GetOriginalUrlUseCase
 from src.application.create_short_url import CreateShortUrlUseCase
 from src.application.get_all_short_urls import GetAllShortUrlsUseCase
+from src.application.get_original_url import GetOriginalUrlUseCase
 from src.application.get_url_stats import GetUrlStatsUseCase
-from src.domain.url_repository import UrlRepository
+from src.domain.events import UrlAccessedEvent, UrlShortenedEvent
+from src.domain.repositories.url_repository import UrlRepository
+from src.infrastructure.events.event_bus_impl import InMemoryEventBus
+from src.infrastructure.events.event_handlers import UrlEventHandlers
 from src.infrastructure.shortener.shortener import URLShortener, URLShortenerSHA2
+from src.infrastructure.storage.analytics_repository import MongoAnalyticsRepository
 from src.infrastructure.storage.cache import (
     AbstractCacheRepository,
     InMemoryCacheRepository,
@@ -13,10 +17,6 @@ from src.infrastructure.storage.cache import (
 from src.infrastructure.storage.in_memory import InMemoryRepository
 from src.infrastructure.storage.memcached import MemcachedRepository
 from src.infrastructure.storage.mongo import MongoRepository
-from src.infrastructure.events.event_bus_impl import InMemoryEventBus
-from src.infrastructure.events.event_handlers import UrlEventHandlers
-from src.infrastructure.storage.analytics_repository import MongoAnalyticsRepository
-from src.domain.events import UrlShortenedEvent, UrlAccessedEvent
 
 
 # Event Bus and Handlers

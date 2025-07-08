@@ -1,6 +1,6 @@
 from typing import Dict, Optional
 
-from src.infrastructure.storage.analytics_repository import AnalyticsRepository
+from src.domain.repositories.analytics_repository import AnalyticsRepository
 
 
 class GetUrlStatsUseCase:

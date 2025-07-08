@@ -1,7 +1,7 @@
-from typing import List, Dict
 import logging
+from typing import Dict, List
 
-from src.domain.url_repository import UrlRepository
+from src.domain.repositories.url_repository import UrlRepository
 
 
 class GetAllShortUrlsUseCase:

@@ -1,16 +1,9 @@
 import hashlib
 import string
-from abc import ABC, abstractmethod
+
+from src.domain.url_shortener import URLShortener
 
 BASE62_CHARS = string.digits + string.ascii_letters
-
-
-class URLShortener(ABC):
-    @abstractmethod
-    def shorten_url(self, auto_increment_id: int) -> str: ...
-
-    @abstractmethod
-    def convert(self, auto_increment_id: int) -> str: ...
 
 
 class URLShortenerBase62(URLShortener):

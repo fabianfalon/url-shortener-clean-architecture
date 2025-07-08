@@ -1,9 +1,9 @@
+from src.domain.events import EventBus
+from src.domain.repositories.cache_repository import AbstractCacheRepository
+from src.domain.repositories.url_repository import UrlRepository
 from src.domain.url import Url
-from src.domain.url_repository import UrlRepository
+from src.domain.url_shortener import URLShortener
 from src.domain.value_objects import OriginalUrl, ShortCode
-from src.infrastructure.events.event_bus_impl import InMemoryEventBus
-from src.infrastructure.shortener.shortener import URLShortener
-from src.infrastructure.storage.cache import AbstractCacheRepository
 
 
 class CreateShortUrlUseCase:
@@ -12,7 +12,7 @@ class CreateShortUrlUseCase:
         url_repository: UrlRepository,
         shorter: URLShortener,
         cache: AbstractCacheRepository,
-        event_bus: InMemoryEventBus,
+        event_bus: EventBus,
     ):
         self._url_repository = url_repository
         self._shorter = shorter
