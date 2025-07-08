@@ -10,8 +10,9 @@ class InMemoryRepository(UrlRepository):
 
     _urls: List[Url] = []
 
-    async def save(self, url: Url) -> None:
+    async def save(self, url: Url) -> Url:
         self._urls.append(url)
+        return url
 
     async def find_by_id(self, url_id: str) -> Optional[Url]:
         return next(filter(lambda x: (x.id == url_id), self._urls), None)

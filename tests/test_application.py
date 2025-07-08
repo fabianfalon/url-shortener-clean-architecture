@@ -12,16 +12,16 @@ from tests.conftest import MOCK_ORIGINAL_URL, MOCK_SHORT_URL
 
 
 class TestShortenerUrlUseCases:
-    # @pytest.mark.asyncio
-    # async def test_create_new_short_url(self):
-    #     use_case = CreateShortUrlUseCase(
-    #         url_repository=InMemoryRepository(),
-    #         shorter=URLShortenerSHA2(),
-    #         cache=InMemoryCacheRepository(),
-    #         event_bus=InMemoryEventBus(),
-    #     )
-    #     url = await use_case.execute(original_url=MOCK_ORIGINAL_URL)
-    #     expect(url).to(equal(MOCK_SHORT_URL))
+    @pytest.mark.asyncio
+    async def test_create_new_short_url(self):
+        use_case = CreateShortUrlUseCase(
+             url_repository=InMemoryRepository(),
+             shorter=URLShortenerSHA2(),
+             cache=InMemoryCacheRepository(),
+             event_bus=InMemoryEventBus(),
+        )
+        url = await use_case.execute(original_url=MOCK_ORIGINAL_URL)
+        expect(url).to(equal(MOCK_SHORT_URL))
 
     @pytest.mark.asyncio
     async def test_get_short_url(self):
