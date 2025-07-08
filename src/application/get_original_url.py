@@ -1,9 +1,9 @@
 from typing import Optional
 
-from src.domain.url_repository import UrlRepository
+from src.domain.events import EventBus
+from src.domain.repositories.cache_repository import AbstractCacheRepository
+from src.domain.repositories.url_repository import UrlRepository
 from src.domain.value_objects import ShortCode
-from src.infrastructure.events.event_bus_impl import InMemoryEventBus
-from src.infrastructure.storage.cache import AbstractCacheRepository
 
 
 class GetOriginalUrlUseCase:
@@ -11,7 +11,7 @@ class GetOriginalUrlUseCase:
         self,
         url_repository: UrlRepository,
         cache: AbstractCacheRepository,
-        event_bus: InMemoryEventBus,
+        event_bus: EventBus,
     ):
         self._url_repository = url_repository
         self._cache = cache

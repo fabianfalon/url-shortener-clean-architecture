@@ -25,6 +25,7 @@ services:
       - MONGO_URL=mongodb://url-shortener-mongodb:27017
       - MEMCACHED_URL=url-shortener-memcached:11211
       - BASE_SHORT_URL=http://localhost:5000/
+      - LOG_LEVEL=INFO
     env_file:
       - ./src/.env
     volumes:

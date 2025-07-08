@@ -13,5 +13,8 @@ shell/lint:
 
 # Format the backend code using ruff
 shell/format:
-	ruff check --config=pyproject.toml backend --fix --select I --exclude "migrations"
+	ruff check --config=pyproject.toml src --fix --select I --exclude "migrations"
 	ruff format src --exclude "migrations"
+
+test:
+	PYTHONPATH=. pytest -W ignore::DeprecationWarning --cov=src --cov-report=xml --cov-report=html --cov-fail-under=70

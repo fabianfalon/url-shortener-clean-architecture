@@ -1,8 +1,8 @@
 from abc import ABC, abstractmethod
 from typing import List, Optional
 
-from .url import Url
-from .value_objects import OriginalUrl, ShortCode, UrlId
+from src.domain.url import Url
+from src.domain.value_objects import OriginalUrl, ShortCode, UrlId
 
 
 class UrlRepository(ABC):

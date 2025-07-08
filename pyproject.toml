@@ -1,6 +1,30 @@
 [project]
-line-length = 120
-target-version = "py312"
+name = "url-shortener-clean-architecture"
+version = "0.1.0"
+description = "Un acortador de URLs con Clean Architecture"
+authors = [
+    { name = "Fabian Falón", email = "fabian.falon@gmail.com" }
+]
+requires-python = ">=3.12"
+dependencies = [
+    "fastapi[all]==0.115.14",
+    "motor==3.6.0",
+    "python-memcached==1.62"
+]
+
+[project.optional-dependencies]
+test = [
+    "pytest==8.4.1",
+    "pytest-cov==6.2.1",
+    "pytest-asyncio==0.23.6",
+    "pytest-mock==3.14.1",
+    "expects==0.9.0",
+    "ruff==0.12.1",
+    "doublex-expects==0.7.1",
+    "bandit==1.8.5",
+    "pip-audit==2.7.3",
+    "import-linter==2.3"
+]
 
 [tool.ruff.lint.isort]
 known-first-party = ["delivery", "domain", "infrastructure", "application"]

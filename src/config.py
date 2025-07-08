@@ -1,3 +1,5 @@
+from typing import Optional
+
 from pydantic_settings import BaseSettings, SettingsConfigDict
 
 
@@ -28,8 +30,8 @@ class LocationSettings(BaseSettings):
 
 
 class Settings(CommonSettings, ServerSettings, LocationSettings):
-    mongo_url: str = None
-    memcached_url: str = None
+    mongo_url: Optional[str] = None
+    memcached_url: Optional[str] = None
     log_level: str = "info"
 
     model_config = SettingsConfigDict(
@@ -37,5 +39,6 @@ class Settings(CommonSettings, ServerSettings, LocationSettings):
         env_file_encoding="utf-8",
         extra="allow",
     )
+
 
 settings = Settings()

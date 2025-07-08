@@ -1,0 +1,15 @@
+[importlinter]
+root_package = src
+
+[importlinter:contract:layered-architecture]
+name = Layered architecture
+type = layers
+layers =
+    src.delivery
+    src.infrastructure
+    src.application
+    src.domain
+rules =
+    src.delivery -> src.infrastructure
+    src.infrastructure -> src.application
+    src.application -> src.domain

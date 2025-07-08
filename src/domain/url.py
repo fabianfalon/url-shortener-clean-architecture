@@ -1,9 +1,9 @@
 from abc import ABC, abstractmethod
 from datetime import datetime
-from typing import Optional, List
+from typing import List, Optional
 
+from .events import DomainEvent, UrlAccessedEvent, UrlShortenedEvent
 from .value_objects import OriginalUrl, ShortCode, UrlId
-from .events import UrlShortenedEvent, UrlAccessedEvent, DomainEvent
 
 
 class AggregateRoot(ABC):

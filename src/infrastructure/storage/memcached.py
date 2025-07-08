@@ -1,5 +1,6 @@
-import memcache
 from typing import Optional
+
+import memcache
 
 from src.config import settings
 from src.infrastructure.storage.cache import AbstractCacheRepository

@@ -1,14 +1,13 @@
-import os
 from abc import ABC
-from typing import List, Optional
 import logging
+from typing import List, Optional
 
 import motor.motor_asyncio
 
 from src.config import settings
+from src.domain.repositories.url_repository import UrlRepository
 from src.domain.url import Url
-from src.domain.url_repository import UrlRepository
-from src.domain.value_objects import ShortCode, OriginalUrl
+from src.domain.value_objects import OriginalUrl, ShortCode
 
 
 class AbstractMongoRepository(ABC):

@@ -3,6 +3,18 @@ from fastapi.testclient import TestClient
 from starlette import status
 from src.main import app
 from tests.conftest import MOCK_ORIGINAL_URL, MOCK_SHORT_URL
+from src.infrastructure.storage.in_memory import InMemoryRepository
+from src.delivery.api.dependencies import mongo_repository
+import pytest
+
+
+# Sobrescribir la dependencia de mongo_repository por InMemoryRepository
+@pytest.fixture(autouse=True)
+def override_repo_dependency():
+    repo = InMemoryRepository()
+    app.dependency_overrides[mongo_repository] = lambda: repo
+    yield
+    app.dependency_overrides.clear()
 
 
 class TestApi:
@@ -17,7 +29,7 @@ class TestURLShortenerApi(TestApi):
         expect(response.status_code).to(be(status.HTTP_200_OK))
         expect(response.json().get("url")).to(equal(f"http://localhost:5000/{MOCK_SHORT_URL}"))
 
-    def test_get_original_url(self, mock_create_short_url_use_case, mock_get_original_url_use_case):
+    def test_get_original_url(self):
         data = {"url": MOCK_ORIGINAL_URL}
         self.client.post("/shortener", json=data)
 
